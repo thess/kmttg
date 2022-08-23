@@ -22,6 +22,9 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Stack;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Arrays;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -1198,11 +1201,13 @@ public class configAuto {
       entry.comskipIni = ini;
       
       String cFilter = (String)string.removeLeadingTrailingSpaces(channelFilter.getText());
-      if (cFilter.length() > 0)
+      if (cFilter.length() > 0) {
          entry.channelFilter = cFilter;
-      else
+         entry.channelFilterList = Arrays.asList(cFilter.split("\\s*,\\s*"));
+      } else {
          entry.channelFilter = null;
-      
+         entry.channelFilterList = new ArrayList<String>();
+      }
       cFilter = (String)string.removeLeadingTrailingSpaces(tivoFileNameFormat.getText());
       if (cFilter.length() > 0)
          entry.tivoFileNameFormat = cFilter;

@@ -22,6 +22,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Stack;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -181,6 +182,7 @@ public class autoConfig {
                   entry.useProgramId_unique = Integer.parseInt(value);
                if (name.matches("channelFilter")) {
                   entry.channelFilter = value;
+                  entry.channelFilterList = Arrays.asList(value.split("\\s*,\\s*"));
                }
                if (name.matches("encode_name")) {
                   // encode_name value can have spaces

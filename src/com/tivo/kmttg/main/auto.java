@@ -369,7 +369,7 @@ public class auto {
    private static Boolean filterByTivoName(Hashtable<String,String>entry, autoEntry auto) {
       if ( ! auto.tivo.equals("all") ) {
          if ( ! auto.tivo.equals(entry.get("tivoName")) ) {
-            log.print("NOTE: no match due to tivo name filter - tivo: " +
+            debug.print("NOTE: no match due to tivo name filter - tivo: " +
                   auto.tivo + ", entry: " + entry.get("title"));
             return true;
          }
@@ -398,7 +398,7 @@ public class auto {
             }               
          }
          if (filter) {
-            log.print("NOTE: no match due to Date Filter - " + entry.get("title") + ", age=" + diffStr + " hours");
+            debug.print("NOTE: no match due to Date Filter - " + entry.get("title") + ", age=" + diffStr + " hours");
          }
       }
       return filter;
@@ -454,19 +454,29 @@ public class auto {
    // Return true if should be filtered out because auto.channelFilter set and entry does not match it
    private static Boolean filterChannel(Hashtable<String,String>entry, autoEntry auto) {
       Boolean filter = false; 
+      String cmatch = null;
+
       if (auto.channelFilter != null) {
-         filter = true;
+         filter = false;
          if (entry.containsKey("channelNum")) {
-            if (entry.get("channelNum").equals(auto.channelFilter))
-               filter = false;
+            for (int i = 0; i <= auto.channelFilterList.size() - 1; i++) {
+               if (entry.get("channelNum").equals(auto.channelFilterList.get(i))) {
+                  cmatch = entry.get("channelNum");
+                  filter = true;
+               }
+            }
          }
          if (entry.containsKey("channel")) {
-            if (entry.get("channel").equals(auto.channelFilter))
-               filter = false;
+            for (int i = 0; i <= auto.channelFilterList.size() - 1; i++) {
+               if (entry.get("channel").equals(auto.channelFilterList.get(i))) {
+                  cmatch = entry.get("channel");
+                  filter = true;
+               }
+            }
          }
          
          if (filter) {
-            log.print("NOTE: Filtered out due to channel filter = '" + auto.channelFilter + "' - " + entry.get("title"));
+            log.print("NOTE: Excluded due to channel filter match = '" + cmatch + "' - " + entry.get("title"));
          }
       }
       return filter;
