@@ -1,3 +1,5 @@
 #!/bin/sh
 DIRNAME=`dirname "$0"`
-java -Djava.net.preferIPv4Stack=true -jar "$DIRNAME/kmttg.jar" $@
+[ -z "$JFX_LIB" ] &&  JFX_LIB=/usr/share/openjfx/lib
+
+java --module-path "${JFX_LIB}" --add-modules javafx.web -Djava.net.preferIPv4Stack=true -jar "$DIRNAME/kmttg.jar" $@
