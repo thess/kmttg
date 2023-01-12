@@ -886,9 +886,9 @@ public class auto {
       }
       backgroundProcess process = new backgroundProcess();
       Stack<String> command = new Stack<String>();
-      String jarFile = config.programDir + File.separator + "kmttg.jar";
-      command.add("java");
-      command.add("-jar");
+      String jarFile = config.programDir + File.separator + "kmttg";
+      //command.add("java");
+      //command.add("-jar");
       command.add(jarFile);
       command.add("-a");
       command.add("&");
