@@ -69,6 +69,7 @@ public class AvailableSocket {
          socket = -1;
       }
    }
+   @Deprecated(since="9")
    protected void finalize() throws Throwable {
         super.finalize();
         close();

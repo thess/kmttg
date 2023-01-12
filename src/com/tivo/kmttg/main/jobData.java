@@ -21,6 +21,7 @@ package com.tivo.kmttg.main;
 import java.io.Serializable;
 import java.util.Hashtable;
 import java.util.Stack;
+import java.lang.reflect.*;
 
 import com.tivo.kmttg.JSON.JSONArray;
 import com.tivo.kmttg.JSON.JSONObject;
@@ -460,15 +461,12 @@ public class jobData implements Serializable, Cloneable {
 
       try
       {
-         clone = o.getClass().newInstance();
+         clone = o.getClass().getDeclaredConstructor().newInstance();
       }
-      catch (InstantiationException e)
+      catch (InvocationTargetException | NoSuchMethodException |
+             InstantiationException | IllegalAccessException ex)
       {
-         e.printStackTrace();
-      }
-      catch (IllegalAccessException e)
-      {
-         e.printStackTrace();
+         ex.printStackTrace();
       }
 
       // Walk up the superclass hierarchy

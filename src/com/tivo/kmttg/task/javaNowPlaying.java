@@ -120,6 +120,7 @@ public class javaNowPlaying extends baseTask implements Serializable {
                thread_running = false;
             }
             catch (Exception e) {
+               log.error("Error downloading NPL: " + e.getMessage());
                success = false;
                thread_running = false;
                Thread.currentThread().interrupt();
