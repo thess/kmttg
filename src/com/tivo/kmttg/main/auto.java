@@ -42,7 +42,8 @@ public class auto {
    private static Hashtable<String,String> history_hash = new Hashtable<String,String>();
    private static boolean process_auto = true;
    public static boolean process_web = true;
-   private static String runAsAdmin = config.programDir + "\\service\\win32\\runasadmin.vbs";
+   //private static String runAsAdmin = config.programDir + "\\service\\runasadmin.vbs";
+   private static String runAsAdmin = "runas /profile /user:Administrator";
    
    // Batch mode processing (no GUI)
    public static void startBatchMode() {
@@ -977,15 +978,13 @@ public class auto {
       return null;
    }
    
-   // Windows only: Starts kmttg service using "install-kmttg-service.bat" as admin
+   // Windows only: Starts kmttg service using "WinSW" as admin
    public static void serviceCreate() {
       Task<Void> task = new Task<Void>() {
          @Override public Void call() {
             Stack<String> command = new Stack<String>();
-            command.add("cscript");
-            command.add("//nologo");
             command.add(runAsAdmin);
-            command.add(config.programDir + "\\service\\win32\\install-kmttg-service.bat");
+            command.add(config.programDir + "\\service\\kmttg-svc install");
             backgroundProcess process = new backgroundProcess();
             if ( process.run(command) ) {
                process.Wait();
@@ -1012,8 +1011,6 @@ public class auto {
       Task<Void> task = new Task<Void>() {
          @Override public Void call() {
             Stack<String> command = new Stack<String>();
-            command.add("cscript");
-            command.add("//nologo");
             command.add(runAsAdmin);
             command.add("sc start kmttg");
             backgroundProcess process = new backgroundProcess();
@@ -1038,13 +1035,11 @@ public class auto {
       new Thread(task).start();
    }
    
-   // Windows only: Starts kmttg service using "sc stop kmttg" running as admin
+   // Windows only: Stops kmttg service using "sc stop kmttg" running as admin
    public static void serviceStop() {
       Task<Void> task = new Task<Void>() {
          @Override public Void call() {
             Stack<String> command = new Stack<String>();
-            command.add("cscript");
-            command.add("//nologo");
             command.add(runAsAdmin);
             command.add("sc stop kmttg");
             backgroundProcess process = new backgroundProcess();
@@ -1083,13 +1078,11 @@ public class auto {
       }
    }
    
-   // Windows only: Starts kmttg service using "sc delete kmttg" running as admin
+   // Windows only: Removes kmttg service using "sc delete kmttg" running as admin
    public static void serviceDelete() {
       Task<Void> task = new Task<Void>() {
          @Override public Void call() {
             Stack<String> command = new Stack<String>();
-            command.add("cscript");
-            command.add("//nologo");
             command.add(runAsAdmin);
             command.add("sc delete kmttg");
             backgroundProcess process = new backgroundProcess();
