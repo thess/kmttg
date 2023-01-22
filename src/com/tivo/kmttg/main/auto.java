@@ -42,8 +42,7 @@ public class auto {
    private static Hashtable<String,String> history_hash = new Hashtable<String,String>();
    private static boolean process_auto = true;
    public static boolean process_web = true;
-   //private static String runAsAdmin = config.programDir + "\\service\\runasadmin.vbs";
-   private static String runAsAdmin = "runas /profile /user:Administrator";
+   private static String runAsAdmin = config.programDir + "\\service\\runasadmin.vbs";
    
    // Batch mode processing (no GUI)
    public static void startBatchMode() {
@@ -983,6 +982,8 @@ public class auto {
       Task<Void> task = new Task<Void>() {
          @Override public Void call() {
             Stack<String> command = new Stack<String>();
+            command.add("cscript");
+            command.add("//nologo");
             command.add(runAsAdmin);
             command.add(config.programDir + "\\service\\kmttg-svc install");
             backgroundProcess process = new backgroundProcess();
@@ -1011,6 +1012,8 @@ public class auto {
       Task<Void> task = new Task<Void>() {
          @Override public Void call() {
             Stack<String> command = new Stack<String>();
+            command.add("cscript");
+            command.add("//nologo");
             command.add(runAsAdmin);
             command.add("sc start kmttg");
             backgroundProcess process = new backgroundProcess();
@@ -1040,6 +1043,8 @@ public class auto {
       Task<Void> task = new Task<Void>() {
          @Override public Void call() {
             Stack<String> command = new Stack<String>();
+            command.add("cscript");
+            command.add("//nologo");
             command.add(runAsAdmin);
             command.add("sc stop kmttg");
             backgroundProcess process = new backgroundProcess();
@@ -1083,6 +1088,8 @@ public class auto {
       Task<Void> task = new Task<Void>() {
          @Override public Void call() {
             Stack<String> command = new Stack<String>();
+            command.add("cscript");
+            command.add("//nologo");
             command.add(runAsAdmin);
             command.add("sc delete kmttg");
             backgroundProcess process = new backgroundProcess();
