@@ -455,20 +455,9 @@ public class jobData implements Serializable, Cloneable {
 		return (jobData) clone(this);
 	}
    
-   private static Object clone(Object o)
+   private static jobData clone(jobData o)
    {
-      Object clone = null;
-
-      try
-      {
-         clone = o.getClass().getDeclaredConstructor().newInstance();
-      }
-      catch (InvocationTargetException | NoSuchMethodException |
-             InstantiationException | IllegalAccessException ex)
-      {
-         ex.printStackTrace();
-      }
-
+      jobData clone = new jobData();
       // Walk up the superclass hierarchy
       for (Class<? extends Object> obj = o.getClass();
       !obj.equals(Object.class);

@@ -86,7 +86,7 @@ public class update {
                   auto.serviceStopIfNeeded();
                   Task<Void> task = new Task<Void>() {
                      public Void call() {
-                        String filename = config.programDir + File.separator + fname;
+                        String filename = config.tmpDir + File.separator + fname;
                         String zipFile = downloadUrl(filename, url);
                         if (zipFile != null) {
                            // Determine if zipFile contains a redirect
@@ -103,6 +103,7 @@ public class update {
                               restartApplication();
                            } else {
                               log.error("Trouble unzipping file: " + zipFile);
+                              file.delete(zipFile);
                            }
                         }
                         return null;
@@ -180,7 +181,7 @@ public class update {
    }
       
    @SuppressWarnings("resource")
-   private static String downloadUrl(String localFileName, String urlString) {
+   public static String downloadUrl(String localFileName, String urlString) {
       BufferedInputStream in = null;
       RandomAccessFile out = null;
       int BLOCK_SIZE = 4096;
@@ -230,7 +231,7 @@ public class update {
    }
       
    @SuppressWarnings("resource")
-   private static Boolean unzip(String dir, String file) {
+   public static Boolean unzip(String dir, String file) {
        Enumeration<?> entries;
        ZipFile zipFile;
 
@@ -259,7 +260,7 @@ public class update {
          zipFile.close();      
                
          // Set all files as executable if non-Windows platform
-         if ( ! config.OS.equals("windows") ) {
+         if ( ! System.getProperty("os.name").toLowerCase().contains("windows") ) {
             String[] command = new String[] {"chmod", "-R", "ugo+x", dir};
             Runtime.getRuntime().exec(command);
          }
