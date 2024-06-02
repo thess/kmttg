@@ -16,7 +16,14 @@ import java.security.SecureRandom;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.Temporal;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -28,6 +35,8 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import com.tivo.kmttg.JSON.JSONObject;
+import com.tivo.kmttg.util.GetKeyStore;
+import com.tivo.kmttg.util.log;
 
 /**
  * Establish an RPC connection route with a TiVo using the provided cdata files.
@@ -104,6 +113,10 @@ public class TiVoRPC {
       if(port <= 0) port = DEFAULT_PORT;
       this.port = port;
       RemoteInit(mak);
+   }
+   
+   public boolean isConnected() {
+      return this.socket.isConnected();
    }
    
    /**
@@ -205,35 +218,27 @@ public class TiVoRPC {
    private final void createSocketFactory() {
       if ( sslSocketFactory == null ) {
         try {
-           KeyStore keyStore = KeyStore.getInstance("PKCS12");
-           // This is default USA password
-           String password = "KllX3KygL9"; // expires 1/24/2026
-           //String password = "vlZaKoduom"; // expires 5/3/2024
-           InputStream keyInput;
-           if (cdata == null) {
-              // Installation dir cdata.p12 file takes priority if it exists
-              String cdata = programDir + "/cdata.p12";
-              if ( new File(cdata).isFile() ) {
-                 keyInput = new FileInputStream(cdata);
-                 cdata = programDir + "/cdata.password";
-                 if (new File(cdata).isFile()) {
-                    Scanner s = new Scanner(new File(cdata));
-                    password = s.useDelimiter("\\A").next();
-                    s.close();
-                 } else {
-                    error("cdata.p12 file present, but cdata.password is not");
-                 }
-              } else {
-                 // Read default USA cdata.p12 from kmttg.jar
-                 keyInput = getClass().getResourceAsStream("/cdata.p12");
+           GetKeyStore getKeyStore = new GetKeyStore(cdata, programDir);
+           KeyStore keyStore = getKeyStore.getKeyStore();
+           String keyPassword = getKeyStore.getKeyPassword();
+
+           Enumeration<String> aliases = keyStore.aliases();
+
+           while (aliases.hasMoreElements()) {
+              String alias = aliases.nextElement();
+              X509Certificate crt = (X509Certificate) keyStore.getCertificate(alias);
+              LocalDateTime notAfter = crt.getNotAfter().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+
+              int expiresDays = (int) ChronoUnit.DAYS.between(LocalDateTime.now(), notAfter);
+              if (expiresDays < 14) {
+                 log.error("RPC Certificate expires in " + expiresDays + " days.");
+              } else if (expiresDays < 90) {
+                 log.warn("RPC Certificate expires in " + expiresDays + " days.");
               }
            }
-           else
-              keyInput = new FileInputStream(cdata);
-           keyStore.load(keyInput, password.toCharArray());
-           keyInput.close();
+
            KeyManagerFactory fac = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-           fac.init(keyStore, password.toCharArray());
+           fac.init(keyStore, keyPassword.toCharArray());
            SSLContext context = SSLContext.getInstance("TLS");
            TrustManager[] tm = new TrustManager[] { new NaiveTrustManager() };
            context.init(fac.getKeyManagers(), tm, new SecureRandom());

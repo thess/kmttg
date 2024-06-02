@@ -36,12 +36,13 @@ import java.util.Set;
 import java.util.Stack;
 
 import com.tivo.kmttg.rpc.Remote;
+import com.tivo.kmttg.rpc.TiVoRPCWS;
 import com.tivo.kmttg.util.*;
 import com.tivo.kmttg.gui.gui;
 import com.tivo.kmttg.httpserver.kmttgServer;
 
 public class config {
-   public static String kmttg = "kmttg v2.8pre-tah";
+   public static String kmttg = "kmttg v2.8-tah";
    
    // encoding related
    public static String encProfDir = "";
@@ -631,11 +632,9 @@ public class config {
       
    public static Remote initRemote(String tivoName) {
       if (rpcEnabled(tivoName)) {
-         Remote r = new Remote(tivoName);
-         return(r);
+         return new Remote(tivoName);
       } else {
-         Remote r = new Remote(tivoName, true);
-         return(r);
+         return new Remote(tivoName, true);
       }
    }
    
