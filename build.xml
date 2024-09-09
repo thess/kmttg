@@ -12,8 +12,8 @@
     <property name="main" value="."/>
     <property name="main.class" value="com.tivo.kmttg.main.kmttg"/>
     <property name="debuglevel" value="source,lines,vars"/>
-    <property name="target" value="11"/>
-    <property name="source" value="11"/>
+    <property name="target" value="21"/>
+    <property name="source" value="21"/>
     <path id="main.classpath">
         <pathelement location="${lib}/jmdns.jar"/>
         <pathelement location="${lib}/tivo-libre.jar"/>
