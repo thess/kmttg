@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <project name="kmttg" basedir="." default="all">
-    <property name="rversion" value="v2.8-tah"/>
+    <property name="rversion" value="v2.9rc1-tah"/>
     <tstamp/>
     <property name="bversion" value="${DSTAMP}-${TSTAMP}"/>
     <property name="lib" value="lib"/>
@@ -53,6 +53,7 @@
             <zipgroupfileset dir="${lib}" includes="tivo-libre.jar"/>
             <zipgroupfileset dir="${lib}" includes="httpclient5-5.1.3.jar"/>
             <zipgroupfileset dir="${lib}" includes="httpcore5-5.1.3.jar"/>
+			<zipgroupfileset dir="${lib}" includes="Java-WebSocket-1.5.5.jar"/>
             <manifest>
                 <attribute name="Main-Class" value="${main.class}"/>
             </manifest>
