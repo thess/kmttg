@@ -15,14 +15,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up JDK 17
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
         architecture: x64
-    - uses: actions/cache@v3
+    - uses: actions/cache@v4
       id: javafx-cache
       with:
         path: javafx-sdk-21.0.1
@@ -30,13 +30,13 @@ jobs:
     - name: Install Dependencies
       if: steps.javafx-cache.outputs.cache-hit != 'true'
       run: |
-       curl -o javafx.zip https://download2.gluonhq.com/openjfx/21.0.4/openjfx-21.0.4_linux-x64_bin-sdk.zip
+       curl -o javafx.zip https://download2.gluonhq.com/openjfx/21.0.5/openjfx-21.0.5_linux-x64_bin-sdk.zip
        unzip javafx.zip
     - name: Build with Ant
       run: |
-        sed -i.bak 's/<property name="fxlib" value=".*"\/>/<property name="fxlib" value="javafx-sdk-21.0.4\/lib"\/>/g' build.xml
+        sed -i.bak 's/<property name="fxlib" value=".*"\/>/<property name="fxlib" value="javafx-sdk-21.0.5\/lib"\/>/g' build.xml
         ant -noinput -buildfile build.xml
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         path: release/kmttg.jar
         if-no-files-found: error
