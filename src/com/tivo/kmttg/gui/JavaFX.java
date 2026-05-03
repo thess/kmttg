@@ -21,6 +21,11 @@ public class JavaFX {
 			Color c = javafx.scene.paint.Color.BLUE;
 		} catch (NoClassDefFoundError e) {
 			try {
+				int majorVersion = getJreMajorVersion();
+				if (majorVersion < 11 || majorVersion > 26) {
+					JOptionPane.showMessageDialog(null, "Your JRE is missing javafx.  KMTTG can auto download javafx for JRE 11-26.");
+				}
+
 				final File currentJar = new File(
 						JavaFX.class.getProtectionDomain().getCodeSource().getLocation().toURI());
 				String javaFXPath = findJavaFXLib(currentJar);
@@ -68,11 +73,13 @@ public class JavaFX {
 		String downloadLink = "";
 		int majorVersion = getJreMajorVersion();
 		if (majorVersion < 17) {
-		   downloadLink = "https://download2.gluonhq.com/openjfx/17.0.15/openjfx-17.0.15_" +downloadOs+ "-" + arch + "_bin-sdk.zip";
+		   downloadLink = "https://download2.gluonhq.com/openjfx/17.0.19/openjfx-17.0.19_" +downloadOs+ "-" + arch + "_bin-sdk.zip";
 		} else if (majorVersion < 22) {
-			downloadLink = "https://download2.gluonhq.com/openjfx/21.0.7/openjfx-21.0.7_" +downloadOs+ "-" + arch + "_bin-sdk.zip";
+		   downloadLink = "https://download2.gluonhq.com/openjfx/21.0.11/openjfx-21.0.11_" +downloadOs+ "-" + arch + "_bin-sdk.zip";
+		} else if (majorVersion < 24) {
+		   downloadLink = "https://download2.gluonhq.com/openjfx/25.0.3/openjfx-25.0.3_" +downloadOs+ "-" + arch + "_bin-sdk.zip";
 		} else {
-		   downloadLink = "https://download2.gluonhq.com/openjfx/24.0.1/openjfx-24.0.1_" +downloadOs+ "-" + arch + "_bin-sdk.zip";
+		   downloadLink = "https://download2.gluonhq.com/openjfx/26.0.1/openjfx-26.0.1_" +downloadOs+ "-" + arch + "_bin-sdk.zip";
 		}
 		String zipFile = update.downloadUrl(zipName, downloadLink);
 		if (zipFile != null) {
