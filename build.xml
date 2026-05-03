@@ -12,8 +12,6 @@
     <property name="main" value="."/>
     <property name="main.class" value="com.tivo.kmttg.main.kmttg"/>
     <property name="debuglevel" value="source,lines,vars"/>
-    <property name="target" value="21"/>
-    <property name="source" value="21"/>
     <path id="main.classpath">
         <pathelement location="${lib}/jmdns.jar"/>
         <pathelement location="${lib}/tivo-libre.jar"/>
@@ -65,8 +63,7 @@
         	debug="true"
         	debuglevel="${debuglevel}"
         	destdir="bin"
-        	source="${source}"
-        	target="${target}"
+        	release="21"
         	>
         	<!-- to better test java 8 compatability bootclasspath="C:\Program Files\Eclipse Adoptium\jdk-8.0.362.9-hotspot\jre\lib\rt.jar" -->
             <src path="src"/>

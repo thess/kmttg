@@ -2,4 +2,7 @@
 DIRNAME=`dirname "$0"`
 [ -z "$JFX_LIB" ] &&  JFX_LIB=/usr/share/openjfx/lib
 
-java --module-path "${JFX_LIB}" --add-modules javafx.web -Djava.net.preferIPv4Stack=true -jar "$DIRNAME/kmttg.jar" $@
+java --module-path "${JFX_LIB}" --add-modules javafx.web \
+     --enable-native-access=javafx.graphics,javafx.web \
+     --sun-misc-unsafe-memory-access=allow \
+     -Djava.net.preferIPv4Stack=true -jar "$DIRNAME/kmttg.jar" $@
